@@ -1,0 +1,87 @@
+basePath: /api/
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Activity:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  requests.PublishActivityRequest:
+    properties:
+      content:
+        type: string
+    required:
+    - content
+    type: object
+info:
+  contact:
+    email: fabio.dsilva@al.infnet.edu.br
+    name: Fábio Pereira da Silva
+  description: Activities microservice for School Management System.
+  license:
+    name: MIT
+  title: Activities Microservice
+  version: "1.0"
+paths:
+  /activities:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Activity'
+            type: array
+      summary: Retrieves all activities
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Publish activity
+        in: body
+        name: activity
+        required: true
+        schema:
+          $ref: '#/definitions/requests.PublishActivityRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+      summary: Publish a new activity
+  /activities/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Activity'
+      summary: Retrivies an activity by the given ID
+swagger: "2.0"
