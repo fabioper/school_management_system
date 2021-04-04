@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,16 @@ func (sc *SubmissionsController) ParseSubmissionRequest(request requests.AddSubm
 }
 
 func (sc *SubmissionsController) FindSubmission(c *gin.Context) {
-	// TODO
+	id := c.Param("id")
+	var submission models.Submission
+
+	if err := sc.database.First(&submission, id).Error; err != nil {
+		message := fmt.Sprintf("Submission with id #%v not found", id)
+		c.JSON(http.StatusNotFound, gin.H{"error": message})
+		return
+	}
+
+	c.JSON(http.StatusOK, submission)
 }
 
 func NewSubmissionsController(database *gorm.DB) *SubmissionsController {

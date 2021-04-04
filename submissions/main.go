@@ -19,7 +19,7 @@ func main() {
 	{
 		api.GET("/submissions", sc.GetAllSubmissions)
 		api.POST("/submissions", sc.AddSubmission)
-		api.POST("/submissions", sc.FindSubmission)
+		api.GET("/submissions/:id", sc.FindSubmission)
 	}
 
 	log.Fatal(r.Run(":5000"))
