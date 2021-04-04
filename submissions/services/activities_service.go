@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"log"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -22,13 +22,13 @@ func (s ExternalActivitiesService) FetchActivity(id uint) (contracts.Activity, e
 
 	resp, err := http.Get(s.endpoint + activityId)
 	if err != nil {
-		panic("Deu ruim")
+		return contracts.Activity{}, errors.New("an error occurred while requesting the data")
 	}
 	defer resp.Body.Close()
 
 	var activityResponse contracts.Activity
 	if err := json.NewDecoder(resp.Body).Decode(&activityResponse); err != nil {
-		log.Fatal("Deu ruim de novo")
+		return contracts.Activity{}, errors.New("an error occurred while processing the data")
 	}
 
 	return activityResponse, nil

@@ -60,14 +60,22 @@ func (sc *SubmissionsController) FindSubmission(c *gin.Context) {
 		return
 	}
 
-	activity, err := sc.service.FetchActivity(submission.ActivityId)
-	if err != nil {
-		message := fmt.Sprintf("An error occurred while getting activity data")
-		c.JSON(http.StatusNotFound, gin.H{"error": message})
+	var details SubmissionDetailsResponse
+	if err := sc.appendActivity(submission, &details); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, SubmissionDetailsResponse{
+	c.JSON(http.StatusOK, details)
+}
+
+func (sc *SubmissionsController) appendActivity(submission models.Submission, response *SubmissionDetailsResponse) error {
+	activity, err := sc.service.FetchActivity(submission.ActivityId)
+	if err != nil {
+		return err
+	}
+
+	*response = SubmissionDetailsResponse{
 		Content:     submission.Content,
 		ClassroomId: submission.ID,
 		StudentId:   submission.StudentId,
@@ -76,5 +84,6 @@ func (sc *SubmissionsController) FindSubmission(c *gin.Context) {
 			Id:      activity.Id,
 			Content: activity.Content,
 		},
-	})
+	}
+	return nil
 }
