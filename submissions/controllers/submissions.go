@@ -8,11 +8,18 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/fabioper/school_management_system/submissions/controllers/requests"
+	. "github.com/fabioper/school_management_system/submissions/controllers/responses"
 	"github.com/fabioper/school_management_system/submissions/models"
+	"github.com/fabioper/school_management_system/submissions/services/contracts"
 )
 
 type SubmissionsController struct {
 	database *gorm.DB
+	service  contracts.ActivitiesService
+}
+
+func NewSubmissionsController(database *gorm.DB, service contracts.ActivitiesService) *SubmissionsController {
+	return &SubmissionsController{database: database, service: service}
 }
 
 func (sc *SubmissionsController) GetAllSubmissions(c *gin.Context) {
@@ -24,7 +31,7 @@ func (sc *SubmissionsController) GetAllSubmissions(c *gin.Context) {
 func (sc *SubmissionsController) AddSubmission(c *gin.Context) {
 	var request requests.AddSubmissionRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{ "error": "ficou doido é" })
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ficou doido é"})
 		return
 	}
 
@@ -53,9 +60,21 @@ func (sc *SubmissionsController) FindSubmission(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, submission)
-}
+	activity, err := sc.service.FetchActivity(submission.ActivityId)
+	if err != nil {
+		message := fmt.Sprintf("An error occurred while getting activity data")
+		c.JSON(http.StatusNotFound, gin.H{"error": message})
+		return
+	}
 
-func NewSubmissionsController(database *gorm.DB) *SubmissionsController {
-	return &SubmissionsController{database: database}
+	c.JSON(http.StatusOK, SubmissionDetailsResponse{
+		Content:     submission.Content,
+		ClassroomId: submission.ID,
+		StudentId:   submission.StudentId,
+		Grade:       submission.Grade,
+		Activity: ActivityContent{
+			Id:      activity.Id,
+			Content: activity.Content,
+		},
+	})
 }

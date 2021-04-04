@@ -7,6 +7,7 @@ import (
 
 	"github.com/fabioper/school_management_system/submissions/controllers"
 	"github.com/fabioper/school_management_system/submissions/models"
+	. "github.com/fabioper/school_management_system/submissions/services"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 
 	models.ConnectDatabase()
 
-	sc := controllers.NewSubmissionsController(models.DB)
+	sc := controllers.NewSubmissionsController(models.DB, NewExternalActivitiesService())
 	api := r.Group("/api")
 	{
 		api.GET("/submissions", sc.GetAllSubmissions)
