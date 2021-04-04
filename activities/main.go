@@ -14,11 +14,12 @@ func main() {
 
 	models.ConnectDatabase()
 
+	ac := controllers.NewActivitiesController(models.DB)
 	api := r.Group("/api")
 	{
-		api.GET("/activities", controllers.GetAllActivities)
-		api.POST("/activities", controllers.AddActivity)
-		api.GET("/activities/:id", controllers.FindActivity)
+		api.GET("/activities", ac.GetAllActivities)
+		api.POST("/activities", ac.AddActivity)
+		api.GET("/activities/:id", ac.FindActivity)
 	}
 
 	log.Fatal(r.Run(":8000"))
