@@ -26,8 +26,8 @@ func (ac *ActivitiesController) GetAllActivities(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
-func (ac *ActivitiesController) AddActivity(c *gin.Context) {
-	var request CreateActivityRequest
+func (ac *ActivitiesController) PublishActivity(c *gin.Context) {
+	var request PublishActivityRequest
 
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
