@@ -19,11 +19,6 @@ func NewActivitiesController(db *gorm.DB) *ActivitiesController {
 	return &ActivitiesController{database: db}
 }
 
-// GetAllActivities godoc
-// @Summary Retrieves all activities
-// @Produce json
-// @Success 200 {array} models.Activity
-// @Router /activities [get]
 func (ac *ActivitiesController) GetAllActivities(c *gin.Context) {
 	var books []models.Activity
 	ac.database.Find(&books)
@@ -31,13 +26,6 @@ func (ac *ActivitiesController) GetAllActivities(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
-// PublishActivity godoc
-// @Summary Publish a new activity
-// @Produce json
-// @Accept json
-// @Success 201
-// @Param activity body PublishActivityRequest true "Publish activity"
-// @Router /activities [post]
 func (ac *ActivitiesController) PublishActivity(c *gin.Context) {
 	var request PublishActivityRequest
 
@@ -51,13 +39,6 @@ func (ac *ActivitiesController) PublishActivity(c *gin.Context) {
 	c.JSON(http.StatusCreated, activity)
 }
 
-// FindActivity godoc
-// @Summary Retrivies an activity by the given ID
-// @Produce json
-// @Accept json
-// @Success 200 {object} models.Activity
-// @Param id path int true "Activity ID"
-// @Router /activities/{id} [get]
 func (ac *ActivitiesController) FindActivity(c *gin.Context) {
 	id := c.Param("id")
 	var activity models.Activity
