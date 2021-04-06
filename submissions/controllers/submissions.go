@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -23,9 +24,10 @@ func NewSubmissionsController(database *gorm.DB, service contracts.ActivitiesSer
 }
 
 func (sc *SubmissionsController) GetAllSubmissions(c *gin.Context) {
-	var books []models.Submission
-	sc.database.Find(&books)
-	c.JSON(http.StatusOK, books)
+	activityId, _ := strconv.Atoi(c.Query("activity_id"))
+	var submissions []models.Submission
+	sc.database.Where(&models.Submission{ActivityId: uint(activityId)}).Find(&submissions)
+	c.JSON(http.StatusOK, submissions)
 }
 
 func (sc *SubmissionsController) AddSubmission(c *gin.Context) {
