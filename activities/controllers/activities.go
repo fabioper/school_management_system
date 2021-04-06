@@ -9,14 +9,19 @@ import (
 
 	. "github.com/fabioper/school_management_system/activities/controllers/requests"
 	"github.com/fabioper/school_management_system/activities/models"
+	. "github.com/fabioper/school_management_system/activities/services/contracts"
 )
 
 type ActivitiesController struct{
-	database *gorm.DB
+	database           *gorm.DB
+	submissionsService SubmissionsService
 }
 
-func NewActivitiesController(db *gorm.DB) *ActivitiesController {
-	return &ActivitiesController{database: db}
+func NewActivitiesController(db *gorm.DB, submissionsService SubmissionsService) *ActivitiesController {
+	return &ActivitiesController{
+		database: db,
+		submissionsService: submissionsService,
+	}
 }
 
 func (ac *ActivitiesController) GetAllActivities(c *gin.Context) {
@@ -49,4 +54,15 @@ func (ac *ActivitiesController) FindActivity(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, activity)
+}
+
+func (ac *ActivitiesController) GetActivitySubmission(c *gin.Context) {
+	id := c.Param("id")
+	submissions, err := ac.submissionsService.GetSubmissions(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{})
+		return
+	}
+
+	c.JSON(http.StatusOK, submissions)
 }
