@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -39,7 +40,18 @@ func (ac *ActivitiesController) PublishActivity(c *gin.Context) {
 		return
 	}
 
-	activity := models.Activity{Content: request.Content}
+	requestDeadline, err := time.Parse("02/01/2006 15:04", request.Deadline)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	activity := models.Activity{
+		Content:   request.Content,
+		TeacherID: request.TeacherID,
+		Deadline:  requestDeadline,
+	}
+
 	ac.database.Create(&activity)
 	c.JSON(http.StatusCreated, activity)
 }
