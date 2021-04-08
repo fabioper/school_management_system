@@ -8,11 +8,13 @@ import (
 	"github.com/fabioper/school_management_system/submissions/controllers"
 	"github.com/fabioper/school_management_system/submissions/models"
 	. "github.com/fabioper/school_management_system/submissions/services"
+	"github.com/fabioper/school_management_system/submissions/services/consumers"
 )
 
 func main() {
 	r := gin.Default()
 
+	go consumers.StartConsumers()
 	models.ConnectDatabase()
 
 	sc := controllers.NewSubmissionsController(models.DB, NewExternalActivitiesService())
