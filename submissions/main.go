@@ -19,7 +19,7 @@ func main() {
 	api := r.Group("/api")
 	{
 		api.GET("/submissions", sc.GetAllSubmissions)
-		api.POST("/submissions", sc.AddSubmission)
+		api.POST("/submissions", sc.SubmitActivity)
 		api.GET("/submissions/:id", sc.FindSubmission)
 	}
 

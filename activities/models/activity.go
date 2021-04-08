@@ -1,8 +1,14 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Activity struct {
 	gorm.Model
-	Content string
+	Content   string
+	TeacherID uint
+	Deadline time.Time
 }

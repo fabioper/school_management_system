@@ -5,8 +5,8 @@ import "gorm.io/gorm"
 type Submission struct {
 	gorm.Model
 	Content     string
-	ActivityId  uint
-	ClassroomId uint
-	StudentId   uint
-	Grade       float32
+	StudentID   uint
+	ClassroomID uint
+	ActivityID  uint
+	GradeID     uint
 }
