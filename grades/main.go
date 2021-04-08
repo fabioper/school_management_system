@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/fabioper/school_management_system/grades/controllers"
@@ -21,4 +23,6 @@ func main() {
 		api.GET("/grades", gc.GetGrades)
 		api.POST("/grades", gc.PublishGrade)
 	}
+
+	log.Fatal(r.Run(":8080"))
 }
