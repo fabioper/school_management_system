@@ -26,10 +26,10 @@ func NewActivitiesController(db *gorm.DB, submissionsService SubmissionsService)
 }
 
 func (ac *ActivitiesController) GetAllActivities(c *gin.Context) {
-	var books []models.Activity
-	ac.database.Find(&books)
+	var activities []models.Activity
+	ac.database.Find(&activities)
 
-	c.JSON(http.StatusOK, books)
+	c.JSON(http.StatusOK, activities)
 }
 
 func (ac *ActivitiesController) PublishActivity(c *gin.Context) {
