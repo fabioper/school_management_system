@@ -18,7 +18,6 @@ import (
 // @title Activities - School Management System
 // @version 1.0
 // @description Service for managing activities.
-// @termsOfService http://swagger.io/terms/
 
 // @contact.name Fábio Pereira da Silva
 // @contact.email fabio.dsilva@al.infnet.edu.br
