@@ -25,6 +25,11 @@ func NewActivitiesController(db *gorm.DB, submissionsService SubmissionsService)
 	}
 }
 
+// GetAllActivities godoc
+// @Summary Busca atividades
+// @Produce json
+// @Success 200 {array} models.Activity
+// @Router /activities/ [get]
 func (ac *ActivitiesController) GetAllActivities(c *gin.Context) {
 	var activities []models.Activity
 	ac.database.Find(&activities)
@@ -32,6 +37,13 @@ func (ac *ActivitiesController) GetAllActivities(c *gin.Context) {
 	c.JSON(http.StatusOK, activities)
 }
 
+// PublishActivity godoc
+// @Summary Publica uma nova atividade
+// @Accept  json
+// @Produce  json
+// @Param activity body PublishActivityRequest true "Activity"
+// @Success 201 {object} models.Activity
+// @Router /activities/ [post]
 func (ac *ActivitiesController) PublishActivity(c *gin.Context) {
 	var request PublishActivityRequest
 
@@ -56,6 +68,11 @@ func (ac *ActivitiesController) PublishActivity(c *gin.Context) {
 	c.JSON(http.StatusCreated, activity)
 }
 
+// FindActivity godoc
+// @Summary Busca uma atividade pela ID
+// @Produce json
+// @Success 200 {object} models.Activity
+// @Router /activities/{id} [get]
 func (ac *ActivitiesController) FindActivity(c *gin.Context) {
 	id := c.Param("id")
 	var activity models.Activity
@@ -68,6 +85,11 @@ func (ac *ActivitiesController) FindActivity(c *gin.Context) {
 	c.JSON(http.StatusOK, activity)
 }
 
+// GetActivitySubmission godoc
+// @Summary Busca as submissões de uma atividade
+// @Produce json
+// @Success 200 {array} Submission
+// @Router /activities/{id}/submissions [get]
 func (ac *ActivitiesController) GetActivitySubmission(c *gin.Context) {
 	id := c.Param("id")
 	submissions, err := ac.submissionsService.GetSubmissions(id)
