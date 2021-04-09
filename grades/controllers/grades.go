@@ -19,12 +19,24 @@ func NewGradesController(database *gorm.DB) *GradesController {
 	return &GradesController{database: database}
 }
 
+// GetGrades godoc
+// @Summary Busca notas das atividades realizadas
+// @Produce json
+// @Success 200 {array} models.Grade
+// @Router /grades/ [get]
 func (gc *GradesController) GetGrades(c *gin.Context) {
 	var grades []models.Grade
 	gc.database.Find(&grades)
 	c.JSON(http.StatusOK, grades)
 }
 
+// PublishGrade godoc
+// @Summary Publica a nota/correção de uma atividade realizada
+// @Accept  json
+// @Produce  json
+// @Param submission body PublishGradeRequest true "Atividade Realizada"
+// @Success 201 {object} models.Grade
+// @Router /grades/ [post]
 func (gc *GradesController) PublishGrade(c *gin.Context) {
 	var request PublishGradeRequest
 

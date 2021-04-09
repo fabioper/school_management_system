@@ -1,0 +1,121 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Service for managing grades.",
+        "title": "Grades - School Management System",
+        "contact": {
+            "name": "Fábio Pereira da Silva",
+            "email": "fabio.dsilva@al.infnet.edu.br"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/grades/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Busca notas das atividades realizadas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Grade"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Publica a nota/correção de uma atividade realizada",
+                "parameters": [
+                    {
+                        "description": "Atividade Realizada",
+                        "name": "submission",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.PublishGradeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Grade"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.Grade": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "grade": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "submissionID": {
+                    "type": "integer"
+                },
+                "teacherID": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.PublishGradeRequest": {
+            "type": "object",
+            "required": [
+                "grade",
+                "submission_id",
+                "teacher_id"
+            ],
+            "properties": {
+                "grade": {
+                    "type": "number"
+                },
+                "submission_id": {
+                    "type": "integer"
+                },
+                "teacher_id": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
