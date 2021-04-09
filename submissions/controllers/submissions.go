@@ -22,6 +22,11 @@ func NewSubmissionsController(database *gorm.DB, service contracts.ActivitiesSer
 	return &SubmissionsController{database: database, service: service}
 }
 
+// GetAllSubmissions godoc
+// @Summary Busca submissões de atividades realizadas
+// @Produce json
+// @Success 200 {array} models.Submission
+// @Router /submissions/ [get]
 func (sc *SubmissionsController) GetAllSubmissions(c *gin.Context) {
 	activityId, _ := strconv.Atoi(c.Query("activity_id"))
 	var submissions []models.Submission
@@ -29,6 +34,13 @@ func (sc *SubmissionsController) GetAllSubmissions(c *gin.Context) {
 	c.JSON(http.StatusOK, submissions)
 }
 
+// SubmitActivity godoc
+// @Summary Enviar uma nova atividade realizada
+// @Accept  json
+// @Produce  json
+// @Param submission body requests.SubmitActivityRequest true "Atividade Realizada"
+// @Success 201 {object} models.Submission
+// @Router /submissions/ [post]
 func (sc *SubmissionsController) SubmitActivity(c *gin.Context) {
 	var request requests.SubmitActivityRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -51,6 +63,11 @@ func (sc *SubmissionsController) ParseSubmissionRequest(request requests.SubmitA
 	return submission
 }
 
+// FindSubmission godoc
+// @Summary Busca uma atividade realizada pela ID
+// @Produce json
+// @Success 200 {object} models.Submission
+// @Router /submissions/{id} [get]
 func (sc *SubmissionsController) FindSubmission(c *gin.Context) {
 	id := c.Param("id")
 	var submission models.Submission
