@@ -1,0 +1,96 @@
+basePath: /api
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Submission:
+    properties:
+      activityID:
+        type: integer
+      classroomID:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      gradeID:
+        type: integer
+      id:
+        type: integer
+      studentID:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  requests.SubmitActivityRequest:
+    properties:
+      activity_id:
+        type: integer
+      classroom_id:
+        type: integer
+      content:
+        type: string
+      student_id:
+        type: integer
+    required:
+    - activity_id
+    - classroom_id
+    - content
+    - student_id
+    type: object
+info:
+  contact:
+    email: fabio.dsilva@al.infnet.edu.br
+    name: Fábio Pereira da Silva
+  description: Service for managing submissions.
+  title: Submissions - School Management System
+  version: "1.0"
+paths:
+  /submissions/:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Submission'
+            type: array
+      summary: Busca submissões de atividades realizadas
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Atividade Realizada
+        in: body
+        name: submission
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SubmitActivityRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Submission'
+      summary: Enviar uma nova atividade realizada
+  /submissions/{id}:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Submission'
+      summary: Busca uma atividade realizada pela ID
+swagger: "2.0"
